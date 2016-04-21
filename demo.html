@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery安卓手机屏幕图案解锁代码</title>
+
+<!--必要样式-->
+<link href="css/patternLock.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/patternLock.js"></script>
+
+<style type="text/css">
+#warp{width:600px; margin:auto;}
+#warp div{margin-bottom:50px;}
+</style>
+</head>
+
+<body>
+<div id="warp">
+	<p>请设置解锁图案</p>
+    <div id="patternContainer"></div>
+	<p>请解锁</p>
+    <div id="patternContainer2"></div>
+</div>
+<script type="text/javascript">
+var LockNums = {
+	firstTime: '',
+	secondTime: ''
+};
+var lock = new PatternLock("#patternContainer", {
+	onDraw: function(pattern) {
+		if (pattern) {
+			setTimeout(function(){
+				lock.reset();
+			}, 500);
+			console.log(pattern)
+			if (!LockNums.firstTime) {
+				LockNums.firstTime = pattern;
+			} else if (LockNums.firstTime && !LockNums.secondTime) {
+				LockNums.secondTime = pattern;
+				if (LockNums.secondTime != LockNums.firstTime) {
+					alert('两次图案不一致，请再次设置');
+					LockNums.firstTime = '';
+					LockNums.secondTime = '';
+				} else {
+					alert('设置成功！');
+					RightPattern = pattern;
+					// 在这里，成功后可以进行其它操作，如跳转页面
+				}
+			}
+		}
+	}
+});
+
+var RightPattern = '123654';
+var lock2 = new PatternLock("#patternContainer2", {
+	onDraw: function(pattern) {
+		if (pattern) {
+			setTimeout(function(){
+				lock2.reset();
+			}, 500);
+			console.log(pattern)
+			if (pattern == RightPattern) {
+				alert('解锁成功！');
+			} else {
+				alert('解锁错误！');
+			}
+		}
+	}
+});
+</script>
+</body>
+</html>
